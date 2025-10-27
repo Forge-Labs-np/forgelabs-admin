@@ -1,0 +1,441 @@
+
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User Profile",
+      "type": "object",
+      "description": "Represents a user's profile information.",
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "description": "The user's first name."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The user's last name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        }
+      },
+      "required": ["firstName", "lastName", "email"]
+    },
+    "Client": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Client",
+      "type": "object",
+      "description": "Represents a client of the Host Node application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Client entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the client."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the client.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "The phone number of the client."
+        },
+        "serverIds": {
+          "type": "array",
+          "description": "References to Servers assigned to the client. (Relationship: Client 1:N Server)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "FINISHED"]
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "phone",
+        "status"
+      ]
+    },
+    "Team": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Team",
+      "type": "object",
+      "description": "Represents a team within the Host Node application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Team entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the team."
+        },
+        "memberIds": {
+          "type": "array",
+          "description": "References to Technicians who are members of the team. (Relationship: Team 1:N Technician)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Technician": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Technician",
+      "type": "object",
+      "description": "Represents a technician within the Host Node application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Technician entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the technician."
+        },
+        "role": {
+          "type": "string",
+          "description": "The role of the technician."
+        },
+        "ticketIds": {
+          "type": "array",
+          "description": "References to Tickets assigned to the technician. (Relationship: Technician 1:N Ticket)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "role"
+      ]
+    },
+    "Server": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Server",
+      "type": "object",
+      "description": "Represents a server within the Host Node application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Server entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the server."
+        },
+        "clientId": {
+          "type": "string",
+          "description": "Reference to the Client that owns the server. (Relationship: Client 1:N Server)"
+        },
+        "host": {
+            "type": "string",
+            "description": "The hosting provider (e.g., AWS, Azure, On-Premise)."
+        },
+        "cpu": {
+            "type": "string",
+            "description": "Allocated CPU resources (e.g. '4 vCPU')."
+        },
+        "ram": {
+            "type": "string",
+            "description": "Allocated RAM resources (e.g. '16 GB')."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "clientId",
+        "host",
+        "cpu",
+        "ram"
+      ]
+    },
+    "Ticket": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Ticket",
+      "type": "object",
+      "description": "Represents a ticket assigned to a technician.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Ticket entity."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the ticket."
+        },
+        "technicianId": {
+          "type": "string",
+          "description": "Reference to the Technician assigned to the ticket. (Relationship: Technician 1:N Ticket)"
+        }
+      },
+      "required": [
+        "id",
+        "description"
+      ]
+    },
+    "Domain": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Domain",
+      "type": "object",
+      "description": "Represents a domain within the Host Node application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Domain entity."
+        },
+        "domainName": {
+          "type": "string",
+          "description": "The name of the domain."
+        },
+        "associatedProject": {
+          "type": "string",
+          "description": "The project associated with the domain."
+        },
+        "registrar": {
+          "type": "string",
+          "description": "The registrar of the domain."
+        },
+        "expirationDate": {
+          "type": "string",
+          "description": "The expiration date of the domain."
+        },
+        "daysRemaining": {
+          "type": "number",
+          "description": "The number of days remaining until expiration."
+        },
+        "autoRenew": {
+          "type": "string",
+          "enum": ["On", "Off"]
+        },
+        "sslExpiry": {
+          "type": "string",
+          "description": "The SSL certificate expiry date."
+        }
+      },
+      "required": [
+        "id",
+        "domainName",
+        "registrar",
+        "expirationDate",
+        "daysRemaining",
+        "autoRenew",
+        "sslExpiry"
+      ]
+    },
+     "UpcomingProject": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Upcoming Project",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "client": { "type": "string" },
+        "businessValue": { "type": "string" },
+        "priority": { "type": "string", "enum": ["Critical", "High", "Medium", "Low"] },
+        "startDate": { "type": "string" },
+        "duration": { "type": "string" },
+        "budget": { "type": "number" },
+        "requiredTeam": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string", "enum": ["Idea/Intake", "Discovery In Progress", "Proposal Sent", "Awaiting Funding/Approval"] },
+        "proposalLink": { "type": "string" }
+      },
+      "required": ["id", "name", "client", "businessValue", "priority", "startDate", "duration", "budget", "requiredTeam", "status", "proposalLink"]
+    },
+    "OnDevelopmentProject": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "On Development Project",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "manager": { "type": "string" },
+        "deadline": { "type": "string" },
+        "health": { "type": "string", "enum": ["Green", "Yellow", "Red"] },
+        "progress": { "type": "number" },
+        "priority": { "type": "string", "enum": ["High", "Medium", "Low"] },
+        "details": {
+          "type": "object",
+          "properties": {
+            "currentPhase": { "type": "string" },
+            "timeSpent": { "type": "number" },
+            "timeBudgeted": { "type": "number" },
+            "milestoneStatus": { "type": "string" },
+            "blockers": { "type": "number" },
+            "assignedTeam": { "type": "array", "items": { "type": "string" } },
+            "statusNotes": { "type": "string" }
+          }
+        }
+      },
+      "required": ["id", "name", "manager", "deadline", "health", "progress", "priority", "details"]
+    },
+    "CompletedProject": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Completed Project",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "manager": { "type": "string" },
+        "completionDate": { "type": "string" },
+        "finalDeliveryDate": { "type": "string" },
+        "billingStatus": { "type": "string", "enum": ["Paid", "Invoice Sent", "Pending"] },
+        "deploymentStatus": { "type": "string", "enum": ["Live", "Staging"] },
+        "reviewStatus": { "type": "string", "enum": ["Completed", "Pending", "Scheduled"] }
+      },
+      "required": ["id", "name", "manager", "completionDate", "finalDeliveryDate", "billingStatus", "deploymentStatus", "reviewStatus"]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/entities/UserProfile"
+          },
+          "description": "Stores user profile data.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "Unique identifier for the user, matching Firebase Auth UID."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/clients/{clientId}",
+        "definition": {
+          "entityName": "Client",
+          "schema": {
+            "$ref": "#/entities/Client"
+          },
+          "description": "Stores client data.  No denormalized authorization fields needed as access is managed at the server level.",
+          "params": [
+            {
+              "name": "clientId",
+              "description": "Unique identifier for the client."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/teams/{teamId}",
+        "definition": {
+          "entityName": "Team",
+          "schema": {
+            "$ref": "#/entities/Team"
+          },
+          "description": "Stores team data.",
+          "params": [
+            {
+              "name": "teamId",
+              "description": "Unique identifier for the team."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/technicians/{technicianId}",
+        "definition": {
+          "entityName": "Technician",
+          "schema": {
+            "$ref": "#/entities/Technician"
+          },
+          "description": "Stores technician data.",
+          "params": [
+            {
+              "name": "technicianId",
+              "description": "Unique identifier for the technician."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/servers/{serverId}",
+        "definition": {
+          "entityName": "Server",
+          "schema": {
+            "$ref": "#/entities/Server"
+          },
+          "description": "Stores server data. Requires 'clientId' to link the server to a client. This simplifies server management and allows for easy querying of servers by client.",
+          "params": [
+            {
+              "name": "serverId",
+              "description": "Unique identifier for the server."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/technicians/{technicianId}/tickets/{ticketId}",
+        "definition": {
+          "entityName": "Ticket",
+          "schema": {
+            "$ref": "#/entities/Ticket"
+          },
+          "description": "Stores ticket data, nested under technician to easily query tickets owned by the technician.",
+          "params": [
+            {
+              "name": "technicianId",
+              "description": "Unique identifier for the technician who owns the ticket."
+            },
+            {
+              "name": "ticketId",
+              "description": "Unique identifier for the ticket."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/domains/{domainId}",
+        "definition": {
+            "entityName": "Domain",
+            "schema": {
+                "$ref": "#/entities/Domain"
+            },
+            "description": "Stores domain data.",
+            "params": [
+                {
+                    "name": "domainId",
+                    "description": "Unique identifier for the domain."
+                }
+            ]
+        }
+      },
+      {
+        "path": "/upcomingProjects/{projectId}",
+        "definition": { "entityName": "UpcomingProject", "schema": { "$ref": "#/entities/UpcomingProject" } }
+      },
+      {
+        "path": "/onDevelopmentProjects/{projectId}",
+        "definition": { "entityName": "OnDevelopmentProject", "schema": { "$ref": "#/entities/OnDevelopmentProject" } }
+      },
+      {
+        "path": "/completedProjects/{projectId}",
+        "definition": { "entityName": "CompletedProject", "schema": { "$ref": "#/entities/CompletedProject" } }
+      }
+    ]
+  }
+}

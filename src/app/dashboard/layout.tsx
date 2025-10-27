@@ -151,7 +151,7 @@ const SidebarContent = () => (
     <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-[73px] items-center justify-center border-b px-6">
         <Link href="/" className="flex items-center gap-3 font-semibold">
-            <Image src="/images/logo.png" alt="ForgeLabs" width={40} height={40} />
+            <Image src="/images/logo.png" alt="ForgeLabs" width={56} height={56} />
         </Link>
         </div>
         <div className="flex-1 overflow-auto py-4">

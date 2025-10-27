@@ -49,8 +49,8 @@ export default function SignupPage() {
               <Image
                 src="/images/logo.png"
                 alt="ForgeLabs"
-                width={48}
-                height={48}
+                width={64}
+                height={64}
               />
             </div>
             <CardTitle className="text-3xl font-bold">

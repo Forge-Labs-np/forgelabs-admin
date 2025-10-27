@@ -149,9 +149,9 @@ const NavItem = ({ item }: { item: any }) => {
 
 const SidebarContent = () => (
     <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-[73px] items-center justify-center border-b px-6">
-        <Link href="/" className="flex items-center gap-3 font-semibold">
-            <Image src="/images/logo.png" alt="ForgeLabs" width={56} height={56} />
+        <div className="flex h-[73px] items-center border-b px-6">
+        <Link href="/" className="flex h-full w-full items-center justify-center">
+            <Image src="/images/logo.png" alt="ForgeLabs" width={100} height={100} className="h-full w-auto object-cover" />
         </Link>
         </div>
         <div className="flex-1 overflow-auto py-4">

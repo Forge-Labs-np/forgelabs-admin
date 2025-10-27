@@ -65,8 +65,8 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <Card className="shadow-lg">
           <CardHeader className="text-center space-y-4">
-            <div className="mx-auto mb-4 flex justify-center items-center gap-2">
-              <Image src="/images/logo.png" alt="ForgeLabs" width={64} height={64} />
+            <div className="mx-auto flex h-16 w-full items-center justify-center">
+              <Image src="/images/logo.png" alt="ForgeLabs" width={100} height={100} className="h-full w-auto object-cover" />
             </div>
             <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
             <CardDescription>Please enter your details to sign in.</CardDescription>

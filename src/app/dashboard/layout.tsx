@@ -238,7 +238,7 @@ export default function DashboardLayout({
             </SheetContent>
           </Sheet>
 
-          <div className_="flex items-center gap-4 ml-auto">
+          <div className="flex items-center gap-4 ml-auto">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-3 relative h-10 rounded-full">

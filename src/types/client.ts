@@ -3,5 +3,7 @@ export type Client = {
   name: string;
   email: string;
   phone: string;
+  location: string;
   status: "ACTIVE" | "FINISHED";
+  createdAt: string;
 };

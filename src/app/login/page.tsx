@@ -1,19 +1,16 @@
-
 "use client";
 
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth, useUser } from "@/firebase";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
 import { AuthError, signInWithEmailAndPassword } from "firebase/auth";
-import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -55,7 +52,7 @@ export default function LoginPage() {
   if (isUserLoading || (!isUserLoading && user)) {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-            <Image src="/images/icon.png" alt="Loading" width={48} height={48} className="animate-spin" />
+            <Image suppressHydrationWarning src="/images/icon.png" alt="Loading" width={48} height={48} className="animate-spin" />
         </div>
     );
   }
@@ -65,8 +62,8 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <Card className="shadow-lg">
           <CardHeader className="text-center space-y-4">
-            <div className="mx-auto flex h-12 w-full items-center justify-center">
-              <Image src="/images/logo.png" alt="ForgeLabs" width={150} height={150} className="h-full w-auto object-contain" />
+            <div className="mx-auto flex h-9 w-full items-center justify-center">
+              <Image suppressHydrationWarning src="/images/logo.png" alt="ForgeLabs" width={150} height={150} className="h-full w-auto object-contain" />
             </div>
             <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
             <CardDescription>Please enter your details to sign in.</CardDescription>
@@ -106,19 +103,6 @@ export default function LoginPage() {
               </Button>
             </form>
           </CardContent>
-           <CardFooter className="flex-col !pb-6 !pt-2">
-            <div className="text-center text-sm text-muted-foreground w-full flex items-center gap-2">
-                <Separator className="shrink" />
-                <span className="shrink-0">or</span>
-                <Separator className="shrink" />
-            </div>
-            <p className="text-sm text-muted-foreground mt-4">
-                Don&apos;t have an account?{" "}
-                <Link href="/signup" className="font-semibold text-primary hover:underline">
-                    Sign up
-                </Link>
-            </p>
-           </CardFooter>
         </Card>
       </div>
     </div>

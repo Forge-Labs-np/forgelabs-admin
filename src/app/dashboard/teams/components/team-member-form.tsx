@@ -39,17 +39,6 @@ export function TeamMemberForm({ initialData, onSubmit, setSheetOpen }: TeamMemb
     },
   });
 
-  useEffect(() => {
-    if (initialData) {
-      form.reset(initialData);
-    } else {
-        form.reset({
-            name: "",
-            role: "",
-        })
-    }
-  }, [initialData, form]);
-
   const handleFormSubmit = (values: z.infer<typeof formSchema>) => {
     onSubmit(values);
   };

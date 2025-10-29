@@ -8,12 +8,10 @@ import { FirebaseClientProvider } from '@/firebase';
 const ptSans = PT_Sans({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: 'Admin-ForgeLabs',
-  description: 'Admin Dashboard for ForgeLabs',
-  icons:{
-    icon:"/images/icon.png",
-    shortcut: '/images/icon.png', 
-    apple: '/images/icon.png', 
+  title: 'ForgeLabs-admin',
+  description: 'ForgeLabs Admin Panel',
+  icons: {
+    icon: '/images/icon.png',
   },
 };
 

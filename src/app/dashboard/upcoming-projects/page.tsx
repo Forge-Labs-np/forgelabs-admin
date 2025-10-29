@@ -63,13 +63,7 @@ export default function UpcomingProjectsPage() {
         });
 
     } else {
-        const newProjectId = doc(collection(firestore, 'projects')).id;
-        const newProject: UpcomingProject = {
-            id: newProjectId,
-            ...values,
-        };
-        const docRef = doc(firestore, 'upcomingProjects', newProjectId);
-        setDocumentNonBlocking(docRef, newProject);
+        addDocumentNonBlocking(collection(firestore, 'upcomingProjects'), values);
 
         toast({
             title: "Project Added",

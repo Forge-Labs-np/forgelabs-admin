@@ -4,6 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { format } from "date-fns"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,11 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
 import { type Client } from "@/types/client"
-import { useEffect } from "react"
-
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -28,9 +25,11 @@ const formSchema = z.object({
   }),
   email: z.string().email(),
   phone: z.string().min(1, "Phone number is required."),
+  location: z.string().min(1, "Location is required."),
+  createdAt: z.string().optional(),
 })
 
-type ClientFormValues = Omit<Client, 'id' | 'status'>;
+type ClientFormValues = Omit<Client, 'id' | 'status' | 'createdAt'> & { createdAt?: string };
 
 type ClientFormProps = {
   setSheetOpen: (open: boolean) => void;
@@ -41,24 +40,14 @@ type ClientFormProps = {
 export function ClientForm({ setSheetOpen, initialData, onSubmit }: ClientFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
-      name: "",
-      email: "",
-      phone: "",
+    defaultValues: {
+      name: initialData?.name || "",
+      email: initialData?.email || "",
+      phone: initialData?.phone || "",
+      location: initialData?.location || "",
+      createdAt: initialData?.createdAt ? format(new Date(initialData.createdAt), "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
     },
   })
-
-  useEffect(() => {
-    if (initialData) {
-        form.reset(initialData);
-    } else {
-        form.reset({
-            name: "",
-            email: "",
-            phone: "",
-        })
-    }
-  }, [initialData, form]);
 
   return (
     <Form {...form}>
@@ -70,7 +59,7 @@ export function ClientForm({ setSheetOpen, initialData, onSubmit }: ClientFormPr
             <FormItem>
               <FormLabel>Client Name</FormLabel>
               <FormControl>
-                <Input placeholder="Innovate Inc." {...field} />
+                <Input placeholder="ForgeLabs" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -83,25 +72,55 @@ export function ClientForm({ setSheetOpen, initialData, onSubmit }: ClientFormPr
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="contact@innovate.com" {...field} />
+                <Input type="email" placeholder="client@forgelabs.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <div className="grid grid-cols-2 gap-4">
+            <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Phone</FormLabel>
+                <FormControl>
+                    <Input placeholder="+977 9876543210" {...field} />
+                </FormControl>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Location</FormLabel>
+                <FormControl>
+                    <Input placeholder="Kathmandu, Nepal" {...field} />
+                </FormControl>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+        </div>
+
         <FormField
           control={form.control}
-          name="phone"
+          name="createdAt"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Phone</FormLabel>
+              <FormLabel>Date Added</FormLabel>
               <FormControl>
-                <Input placeholder="(123) 456-7890" {...field} />
+                <Input type="date" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <div className="flex justify-end space-x-2 pt-4">
             <Button variant="ghost" type="button" onClick={() => setSheetOpen(false)}>Cancel</Button>
             <Button type="submit">{initialData ? "Save Changes" : "Add Client"}</Button>

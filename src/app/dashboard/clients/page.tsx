@@ -50,21 +50,32 @@ export default function ClientsPage() {
     });
   }
 
-  const handleSubmit = (values: Omit<Client, 'id' | 'status'>) => {
+  const handleSubmit = (values: Omit<Client, 'id' | 'status' | 'createdAt'> & {createdAt?: string}) => {
     if (!firestore) return;
     const isEditing = !!editingClient;
 
     if (isEditing) {
+        const clientData = {
+            name: values.name,
+            email: values.email,
+            phone: values.phone,
+            location: values.location,
+            createdAt: values.createdAt ? new Date(values.createdAt).toISOString() : editingClient.createdAt,
+        };
         const docRef = doc(firestore, 'clients', editingClient.id);
-        setDocumentNonBlocking(docRef, values, { merge: true });
+        setDocumentNonBlocking(docRef, clientData, { merge: true });
         toast({
             title: "Client Updated",
             description: `Client "${values.name}" has been successfully updated.`,
         });
     } else {
-        const newClient = {
+        const newClient: Omit<Client, 'id'> = {
+            name: values.name,
+            email: values.email,
+            phone: values.phone,
+            location: values.location,
             status: "ACTIVE",
-            ...values,
+            createdAt: values.createdAt ? new Date(values.createdAt).toISOString() : new Date().toISOString(),
         };
         addDocumentNonBlocking(collection(firestore, 'clients'), newClient);
         toast({

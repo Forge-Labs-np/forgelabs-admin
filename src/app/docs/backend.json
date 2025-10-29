@@ -46,6 +46,10 @@
           "type": "string",
           "description": "The phone number of the client."
         },
+        "location": {
+            "type": "string",
+            "description": "The location of the client."
+        },
         "serverIds": {
           "type": "array",
           "description": "References to Servers assigned to the client. (Relationship: Client 1:N Server)",
@@ -56,6 +60,11 @@
         "status": {
             "type": "string",
             "enum": ["ACTIVE", "FINISHED"]
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp when the client was created."
         }
       },
       "required": [
@@ -63,7 +72,9 @@
         "name",
         "email",
         "phone",
-        "status"
+        "location",
+        "status",
+        "createdAt"
       ]
     },
     "Team": {
@@ -299,6 +310,55 @@
         "reviewStatus": { "type": "string", "enum": ["Completed", "Pending", "Scheduled"] }
       },
       "required": ["id", "name", "manager", "completionDate", "finalDeliveryDate", "billingStatus", "deploymentStatus", "reviewStatus"]
+    },
+    "Expense": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Expense",
+      "type": "object",
+      "description": "Represents a single expense entry.",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "amount": { "type": "number" },
+        "paymentType": {
+          "type": "string",
+          "enum": ["CASH", "ONLINE"]
+        }
+      },
+      "required": ["id", "date", "category", "description", "amount", "paymentType"]
+    },
+    "DeletedExpense": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Deleted Expense",
+      "type": "object",
+      "description": "Represents a log of a deleted expense.",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "amount": { "type": "number" },
+        "paymentType": { "type": "string", "enum": ["CASH", "ONLINE"] },
+        "deletedBy": { "type": "string", "description": "The name or email of the user who deleted the expense." },
+        "deletedAt": { "type": "string", "format": "date-time", "description": "The timestamp when the expense was deleted." }
+      },
+      "required": ["id", "date", "category", "description", "amount", "paymentType", "deletedBy", "deletedAt"]
+    },
+    "OperationalBudget": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Operational Budget",
+      "type": "object",
+      "description": "Represents a non-project-related budget item.",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "description": "Name of the budget item (e.g., Q3 Marketing)." },
+        "category": { "type": "string", "description": "The budget category." },
+        "amount": { "type": "number", "description": "The budgeted amount." },
+        "date": { "type": "string", "description": "The date the budget was set." }
+      },
+      "required": ["id", "name", "category", "amount", "date"]
     }
   },
   "auth": {
@@ -435,6 +495,27 @@
       {
         "path": "/completedProjects/{projectId}",
         "definition": { "entityName": "CompletedProject", "schema": { "$ref": "#/entities/CompletedProject" } }
+      },
+      {
+        "path": "/expenses/{expenseId}",
+        "definition": {
+          "entityName": "Expense",
+          "schema": { "$ref": "#/entities/Expense" }
+        }
+      },
+       {
+        "path": "/deletedExpenses/{logId}",
+        "definition": {
+          "entityName": "DeletedExpense",
+          "schema": { "$ref": "#/entities/DeletedExpense" }
+        }
+      },
+      {
+        "path": "/operationalBudgets/{budgetId}",
+        "definition": {
+          "entityName": "OperationalBudget",
+          "schema": { "$ref": "#/entities/OperationalBudget" }
+        }
       }
     ]
   }

@@ -17,6 +17,7 @@ import type { Client } from "@/types/client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { format } from "date-fns";
 
 const StatusBadge = ({ status }: { status: string }) => {
   const baseClasses = "capitalize border-none";
@@ -49,7 +50,7 @@ const StatusBadge = ({ status }: { status: string }) => {
 export const columns = (onEdit: (client: Client) => void, onDelete: (client: Client) => void): ColumnDef<Client>[] => [
     {
         accessorKey: "id",
-        header: "#",
+        header: "S.N",
         cell: ({ row }) => <div className="text-muted-foreground">{String(row.index + 1).padStart(2, '0')}</div>,
     },
   {
@@ -64,6 +65,19 @@ export const columns = (onEdit: (client: Client) => void, onDelete: (client: Cli
     {
     accessorKey: "phone",
     header: "Phone",
+  },
+  {
+    accessorKey: "location",
+    header: "Location",
+  },
+   {
+    accessorKey: "createdAt",
+    header: "Date Added",
+    cell: ({ row }) => {
+        const date = row.getValue("createdAt") as string;
+        if (!date) return null;
+        return <span>{format(new Date(date), "MMM dd, yyyy")}</span>;
+    },
   },
     {
     accessorKey: "status",

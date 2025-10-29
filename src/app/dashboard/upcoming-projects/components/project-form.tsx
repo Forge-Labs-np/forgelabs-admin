@@ -85,13 +85,17 @@ export function UpcomingProjectForm({ initialData, onSubmit, setSheetOpen }: Pro
   }, [initialData, form]);
 
   const handleFormSubmit = (values: z.infer<typeof formSchema>) => {
-    onSubmit(values);
+    // Before submitting, we map the client ID back to the client name
+    const clientName = clients?.find(c => c.id === values.client)?.name || values.client;
+    onSubmit({ ...values, client: clientName });
   };
   
   const durationOptions = [
     ...Array.from({ length: 12 }, (_, i) => `${i + 1} Month${i > 0 ? 's' : ''}`),
     "More than a year"
   ];
+  
+  const selectedClientId = clients?.find(c => c.name === form.watch('client'))?.id || form.watch('client');
 
   return (
     <Form {...form}>
@@ -115,7 +119,7 @@ export function UpcomingProjectForm({ initialData, onSubmit, setSheetOpen }: Pro
             render={({ field }) => (
                 <FormItem>
                 <FormLabel>Client/Stakeholder</FormLabel>
-                 <Select onValueChange={field.onChange} defaultValue={field.value}>
+                 <Select onValueChange={field.onChange} value={selectedClientId}>
                     <FormControl>
                         <SelectTrigger>
                             <SelectValue placeholder="Select a client or stakeholder" />
@@ -123,7 +127,7 @@ export function UpcomingProjectForm({ initialData, onSubmit, setSheetOpen }: Pro
                     </FormControl>
                     <SelectContent>
                         {(clients || []).map(client => (
-                            <SelectItem key={client.id} value={client.name}>{client.name}</SelectItem>
+                            <SelectItem key={client.id} value={client.id}>{client.name}</SelectItem>
                         ))}
                         <SelectItem value="Internal">Internal</SelectItem>
                     </SelectContent>

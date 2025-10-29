@@ -79,6 +79,14 @@ export const renderSubComponent = ({ row }: RenderSubComponentProps) => {
     const onMoveClick = () => {
         project.onMove(project.id);
     }
+    
+    const formatCurrency = (amount: number) => {
+        return new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "NPR",
+            minimumFractionDigits: 0,
+        }).format(amount);
+    };
 
     return (
         <Card className="bg-muted/50 border-none rounded-none">
@@ -93,7 +101,7 @@ export const renderSubComponent = ({ row }: RenderSubComponentProps) => {
                 </div>
                 <div className="space-y-1">
                     <p className="text-xs font-semibold text-muted-foreground">ESTIMATED BUDGET</p>
-                    <p className="text-sm">${project.budget.toLocaleString()}</p>
+                    <p className="text-sm">{formatCurrency(project.budget)}</p>
                 </div>
                 <div className="space-y-1">
                     <p className="text-xs font-semibold text-muted-foreground">ESTIMATED DURATION/EFFORT</p>

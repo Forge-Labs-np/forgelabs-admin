@@ -1,20 +1,58 @@
 
 "use client";
 
+import React from "react";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ChartTooltip, ChartTooltipContent, ChartContainer } from "@/components/ui/chart";
-
-const chartData = [
-  { month: "Jan", newClients: 2 },
-  { month: "Feb", newClients: 3 },
-  { month: "Mar", newClients: 1 },
-  { month: "Apr", newClients: 4 },
-  { month: "May", newClients: 5 },
-  { month: "Jun", newClients: 2 },
-];
+import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
+import { collection } from "firebase/firestore";
+import type { Client } from "@/types/client";
+import { subMonths, format, startOfMonth, endOfMonth } from 'date-fns';
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function ClientGrowthChart() {
+  const firestore = useFirestore();
+  const clientsCollection = useMemoFirebase(() => firestore ? collection(firestore, 'clients') : null, [firestore]);
+  const { data: clients, isLoading } = useCollection<Client>(clientsCollection);
+
+  const chartData = React.useMemo(() => {
+    const data = [];
+    const now = new Date();
+
+    for (let i = 5; i >= 0; i--) {
+      const monthDate = subMonths(now, i);
+      const monthStart = startOfMonth(monthDate);
+      const monthEnd = endOfMonth(monthDate);
+      
+      const newClients = clients?.filter(client => {
+        if (!client.createdAt) return false;
+        const createdAtDate = new Date(client.createdAt);
+        return createdAtDate >= monthStart && createdAtDate <= monthEnd;
+      }).length || 0;
+
+      data.push({
+        month: format(monthDate, "MMM"),
+        newClients,
+      });
+    }
+    return data;
+  }, [clients]);
+
+  if (isLoading) {
+    return (
+        <Card className="col-span-1 lg:col-span-2">
+            <CardHeader>
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+            </CardHeader>
+            <CardContent className="h-[250px] w-full">
+                <Skeleton className="h-full w-full" />
+            </CardContent>
+        </Card>
+    );
+  }
+
   return (
     <Card className="col-span-1 lg:col-span-2">
       <CardHeader>

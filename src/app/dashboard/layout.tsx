@@ -19,6 +19,9 @@ import {
   Rocket,
   ListTodo,
   Settings,
+  Banknote,
+  Wallet,
+  AreaChart,
 } from "lucide-react";
 import {
   Collapsible,
@@ -71,6 +74,14 @@ const navItems = [
   { href: "/dashboard/servers", icon: Server, label: "Servers" },
   { href: "/dashboard/domains", icon: Globe, label: "Domains" },
   { href: "/dashboard/teams", icon: Briefcase, label: "Team" },
+  {
+    label: "Financial",
+    icon: Wallet,
+    subItems: [
+      { href: "/dashboard/expenses", icon: Banknote, label: "Expenses" },
+      { href: "/dashboard/budget", icon: AreaChart, label: "Budget" },
+    ]
+  }
 ];
 
 const NavItem = ({ item }: { item: any }) => {
@@ -149,9 +160,9 @@ const NavItem = ({ item }: { item: any }) => {
 
 const SidebarContent = () => (
     <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-[73px] items-center border-b px-6">
-        <Link href="/" className="flex h-full w-full items-center justify-center">
-            <Image src="/images/logo.png" alt="ForgeLabs" width={200} height={200} className="h-full w-auto object-contain" />
+        <div className="flex h-[73px] items-center justify-center border-b px-6">
+        <Link href="/" className="flex items-center gap-3 font-semibold">
+            <Image suppressHydrationWarning src="/images/logo.png" alt="ForgeLabs" width={120} height={120} />
         </Link>
         </div>
         <div className="flex-1 overflow-auto py-4">
@@ -200,7 +211,7 @@ export default function DashboardLayout({
   if (isUserLoading || !user) {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-            <Image src="/images/icon.png" alt="Loading" width={48} height={48} className="animate-spin" />
+            <Image suppressHydrationWarning src="/images/icon.png" alt="Loading" width={48} height={48} className="animate-spin" />
         </div>
     );
   }
@@ -227,7 +238,7 @@ export default function DashboardLayout({
             </SheetContent>
           </Sheet>
 
-          <div className="flex items-center gap-4 ml-auto">
+          <div className_="flex items-center gap-4 ml-auto">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-3 relative h-10 rounded-full">
